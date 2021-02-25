@@ -1,0 +1,39 @@
+{
+  "name": "svelte-window",
+  "version": "1.0.0",
+  "description": "Svelte components for efficiently rendering large, scrollable lists and tabular data. Port of react-window to Svelte.",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Michael Lucht",
+      "email": "micha-lmxt@gradientdescent.de",
+      "url": "https://github.com/micha-lmxt/svelte-window"
+    }
+  ],
+  "author": "micha-lmxt <micha-lmxt@gradientdescent.de> (https://gradientdescent.de)",
+  "license": "MIT",
+  "devDependencies": {
+    "svelte": "^3.32.3"
+  },
+  "dependencies": {
+  },
+  "sideEffects": false,
+  "keywords": [
+    "svelte",
+    "sveltejs",
+    "react",
+    "reactjs",
+    "virtual",
+    "window",
+    "windowed",
+    "list",
+    "scrolling",
+    "infinite",
+    "virtualized",
+    "table",
+    "grid",
+    "spreadsheet"
+  ]
+}
