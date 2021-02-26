@@ -6,12 +6,7 @@
         `${rowIndex}:${columnIndex}`;
     
     
-    export const styleString = (s)=> (s.position !== undefined? "position: " + s.position +";" : "") +
-        (s.left !== undefined ? "left: " + s.left + "px;" : "") +
-        (s.right !== undefined? "right: " + s.right + "px;" : "") +
-        (s.top !== undefined? "top: " + s.top + "px;" : "") +
-        (s.height !== undefined? "height: " + s.height + "px;" : "") +
-        (s.width !== undefined? "width: " + s.width + "px;" : "");
+    
      
     //
     // In DEV mode, this Set helps us only log a warning once per component instance.
@@ -395,14 +390,14 @@ if (process.env.NODE_ENV !== 'production') {
         } else {
             const offset = getColumnOffset(props, columnIndex, _instanceProps);
             const isRtl = direction === "rtl";
-            itemStyleCache[key] = style = 
-                "position: absolute;"+
-                (isRtl ? "" : ("left: "+ offset + "px;"))+
-                (isRtl ? "right: "+offset+"px;" : "") +
-                "top: "+getRowOffset(props, rowIndex, _instanceProps) +"px;" + 
-                "height: "+getRowHeight(props, rowIndex, _instanceProps)+"px;"+
-                "width: " + getColumnWidth(props, columnIndex, _instanceProps)+"px;"
-            ;
+            itemStyleCache[key] = style = {
+          position: 'absolute',
+          left: isRtl ? undefined : offset,
+          right: isRtl ? offset : undefined,
+          top: getRowOffset(props, rowIndex, _instanceProps),
+          height: getRowHeight(props, rowIndex, _instanceProps),
+          width: getColumnWidth(props, columnIndex, _instanceProps),
+        };
         }
 
         return style;

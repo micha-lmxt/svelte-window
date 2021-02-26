@@ -1,6 +1,6 @@
 {
   "name": "svelte-window",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Svelte components for efficiently rendering large, scrollable lists and tabular data. Port of react-window to Svelte.",
   "main": "src/index.js",
   "types": "src/index.d.ts",
