@@ -20,7 +20,7 @@ export type Align = "auto" | "smart" | "center" | "end" | "start";
 
 export interface ListChildComponentProps {
     index: number;
-    style: string;
+    style: StyleObject;
     data: any;
     isScrolling?: boolean;
     key: string | number;
@@ -30,7 +30,7 @@ export interface ListChildComponentProps {
 export interface GridChildComponentProps {
     columnIndex: number;
     rowIndex: number;
-    style: string;
+    style: StyleObject;
     data: any;
     isScrolling?: boolean;
     key: string | number;
