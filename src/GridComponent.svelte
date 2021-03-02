@@ -4,10 +4,7 @@
     const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
     const defaultItemKey = ({ columnIndex, data, rowIndex }) =>
         `${rowIndex}:${columnIndex}`;
-    
-    
-    
-     
+
     //
     // In DEV mode, this Set helps us only log a warning once per component instance.
     // This avoids spamming the console every time a render happens.
@@ -57,6 +54,7 @@ if (process.env.NODE_ENV !== 'production') {
     export let style = undefined;
     export let useIsScrolling = false;
     export let width = undefined;
+
     //outer props
     export let specificFunctionProps;
     const {
@@ -77,53 +75,56 @@ if (process.env.NODE_ENV !== 'production') {
         validateProps,
     } = specificFunctionProps;
 
-    let _styleCache = {},_styleCacheCheck={};
-    
-    export const _getItemStyleCache = (a,b,c)=>{
+    let _styleCache = {},
+        _styleCacheCheck = {};
+
+    export const _getItemStyleCache = (a, b, c) => {
         if (
             a === _styleCacheCheck.a &&
             b === _styleCacheCheck.b &&
-            c === _styleCacheCheck.c 
-        ){
+            c === _styleCacheCheck.c
+        ) {
             return _styleCache;
         }
-        _styleCacheCheck = {a,b,c}
+        _styleCacheCheck = { a, b, c };
         _styleCache = {};
         return _styleCache;
-    }
-    //export const _getItemStyleCache = memoizeOne((_, __, ___) => ({}));
-    export const instance = {_getItemStyleCache:_getItemStyleCache};
-    
-    let props, state;
-    $: props = {
-        className,
-        columnCount,
-        columnWidth,
-        direction,
-        height,
-        initialScrollLeft,
-        initialScrollTop,
-        innerRef,
-        innerElementType,
-        innerTagName, // deprecated
-        itemData,
-        itemKey,
-        onItemsRendered,
-        onScroll,
-        outerRef,
-        outerElementType,
-        outerTagName, // deprecated
-        overscanColumnCount,
-        overscanColumnsCount, // deprecated
-        overscanCount, // deprecated
-        overscanRowCount,
-        overscanRowsCount, // deprecated
-        rowCount,
-        rowHeight,
-        style,
-        useIsScrolling,
-        width,
     };
+    //export const _getItemStyleCache = memoizeOne((_, __, ___) => ({}));
+    export const instance = { _getItemStyleCache: _getItemStyleCache };
+
+    let props;
+
+    $: props = {
+            className,
+            columnCount,
+            columnWidth,
+            direction,
+            height,
+            initialScrollLeft,
+            initialScrollTop,
+            //innerRef,
+            innerElementType,
+            innerTagName, // deprecated
+            itemData,
+            itemKey,
+            onItemsRendered,
+            onScroll,
+            //outerRef,
+            outerElementType,
+            outerTagName, // deprecated
+            overscanColumnCount,
+            overscanColumnsCount, // deprecated
+            overscanCount, // deprecated
+            overscanRowCount,
+            overscanRowsCount, // deprecated
+            rowCount,
+            rowHeight,
+            style,
+            useIsScrolling,
+            width,
+        };
+    
 
     // State
     let isScrolling = false,
@@ -136,24 +137,21 @@ if (process.env.NODE_ENV !== 'production') {
         // class member
         _instanceProps,
         _resetIsScrollingTimeoutId = null;
-    $: _instanceProps = instance &&  initInstanceProps(props, instance);
+
+    $: _instanceProps = instance && initInstanceProps(props, instance);
+
     // other states
     let request_resetIsScrollingDebounced = false,
         request_getItemStyleCache = false,
-    // render state
-        items, estimatedTotalHeight, estimatedTotalWidth;
+        // render state
+        items = [],
+        estimatedTotalHeight,
+        estimatedTotalWidth;
 
-    $: state = {
-        isScrolling,
-        horizontalScrollDirection,
-        scrollLeft,
-        scrollTop,
-        scrollUpdateWasRequested,
-        verticalScrollDirection,
-    };
-
-    export const scrollTo = ({ scrollLeft:scrollLeft_, scrollTop:scrollTop_ }) => {
-        
+    export const scrollTo = ({
+        scrollLeft: scrollLeft_,
+        scrollTop: scrollTop_,
+    }) => {
         request_resetIsScrollingDebounced = true;
 
         if (scrollLeft_ !== undefined) {
@@ -184,7 +182,6 @@ if (process.env.NODE_ENV !== 'production') {
     };
 
     export const scrollToItem = ({ align = "auto", columnIndex, rowIndex }) => {
-        
         const scrollbarSize = getScrollbarSize();
 
         if (columnIndex !== undefined) {
@@ -193,7 +190,7 @@ if (process.env.NODE_ENV !== 'production') {
         if (rowIndex !== undefined) {
             rowIndex = Math.max(0, Math.min(rowIndex, rowCount - 1));
         }
-        
+
         const estimatedTotalHeight = getEstimatedTotalHeight(
             props,
             _instanceProps
@@ -202,7 +199,7 @@ if (process.env.NODE_ENV !== 'production') {
             props,
             _instanceProps
         );
-        
+
         // The scrollbar size should be considered when scrolling an item into view,
         // to ensure it's fully visible.
         // But we only need to account for its size when it's actually visible.
@@ -210,7 +207,7 @@ if (process.env.NODE_ENV !== 'production') {
             estimatedTotalWidth > width ? scrollbarSize : 0;
         const verticalScrollbarSize =
             estimatedTotalHeight > height ? scrollbarSize : 0;
-            
+
         scrollTo({
             scrollLeft:
                 columnIndex !== undefined
@@ -256,17 +253,35 @@ if (process.env.NODE_ENV !== 'production') {
         }
     });
 
-    // render  
-    $: {
-        const itemKey_ = itemKey||defaultItemKey;
-        const [columnStartIndex, columnStopIndex] = _getHorizontalRangeToRender(
-            props,
-            state
-        );
-        const [rowStartIndex, rowStopIndex] = _getVerticalRangeToRender();
-        items = [];
+    // render
 
+    $: itemKey_ = itemKey || defaultItemKey;
+
+    
+    let columnStartIndex,columnStopIndex,rowStartIndex,rowStopIndex;
+    $:[columnStartIndex, columnStopIndex] = _getHorizontalRangeToRender(
+        props,
+        scrollLeft,
+        horizontalScrollDirection
+    );
+    
+    
+    
+    $: [rowStartIndex, rowStopIndex] = _getVerticalRangeToRender(
+        props,
+        scrollTop,
+        verticalScrollDirection
+    )
+
+
+
+    $: isScrollingRender = useIsScrolling ? isScrolling : undefined;
+    const render = () => {
         if (columnCount > 0 && rowCount) {
+            items.length =
+                (rowStopIndex - rowStartIndex + 1) *
+                (columnStopIndex - columnStartIndex + 1);
+            let i = 0;
             for (
                 let rowIndex = rowStartIndex;
                 rowIndex <= rowStopIndex;
@@ -277,14 +292,18 @@ if (process.env.NODE_ENV !== 'production') {
                     columnIndex <= columnStopIndex;
                     columnIndex++
                 ) {
-                    items.push({
+                    items[i++] = {
                         columnIndex,
                         data: itemData,
-                        isScrolling: useIsScrolling ? isScrolling : undefined,
-                        key: itemKey_({ columnIndex, data: itemData, rowIndex }),
+                        isScrolling: isScrollingRender,
+                        key: itemKey_({
+                            columnIndex,
+                            data: itemData,
+                            rowIndex,
+                        }),
                         rowIndex,
                         style: _getItemStyle(rowIndex, columnIndex),
-                    });
+                    };
                 }
             }
         }
@@ -292,10 +311,32 @@ if (process.env.NODE_ENV !== 'production') {
         // So their actual sizes (if variable) are taken into consideration.
         estimatedTotalHeight = getEstimatedTotalHeight(props, _instanceProps);
         estimatedTotalWidth = getEstimatedTotalWidth(props, _instanceProps);
-        
+    };
+    $: {
+        render(
+            columnStartIndex,
+            columnStopIndex,
+            rowStartIndex,
+            rowStopIndex,
+            columnCount,
+            columnWidth,
+            height,
+            innerElementType,
+            innerTagName,
+            itemData,
+            itemKey,
+            outerElementType,
+            outerTagName,
+            rowCount,
+            rowHeight,
+            useIsScrolling,
+            width
+        );
+
     }
 
-    let _onItemsRenderedCache = {}, _onScrollCache = {};
+    let _onItemsRenderedCache = {},
+        _onScrollCache = {};
 
     const _callPropsCallbacks = () => {
         if (typeof onItemsRendered === "function") {
@@ -322,7 +363,7 @@ if (process.env.NODE_ENV !== 'production') {
                     visibleColumnStopIndex !== ch.visibleColumnStopIndex ||
                     visibleRowStartIndex !== ch.visibleRowStartIndex ||
                     visibleRowStopIndex !== ch.visibleRowStopIndex
-                ){
+                ) {
                     onItemsRendered(
                         overscanColumnStartIndex,
                         overscanColumnStopIndex,
@@ -342,18 +383,21 @@ if (process.env.NODE_ENV !== 'production') {
                         visibleColumnStopIndex,
                         visibleRowStartIndex,
                         visibleRowStopIndex
-                    }
+                    };
                 }
             }
         }
         const ch = _onScrollCache;
-        if (typeof onScroll === "function" && !( 
-            scrollLeft === ch.scrollLeft &&
-            scrollTop === ch.scrollTop &&
-            horizontalScrollDirection === ch.horizontalScrollDirection &&
-            verticalScrollDirection === ch.verticalScrollDirection &&
-            scrollUpdateWasRequested === scrollUpdateWasRequested
-        )) {
+        if (
+            typeof onScroll === "function" &&
+            !(
+                scrollLeft === ch.scrollLeft &&
+                scrollTop === ch.scrollTop &&
+                horizontalScrollDirection === ch.horizontalScrollDirection &&
+                verticalScrollDirection === ch.verticalScrollDirection &&
+                scrollUpdateWasRequested === scrollUpdateWasRequested
+            )
+        ) {
             onScroll(
                 scrollLeft,
                 scrollTop,
@@ -367,7 +411,7 @@ if (process.env.NODE_ENV !== 'production') {
                 horizontalScrollDirection,
                 verticalScrollDirection,
                 scrollUpdateWasRequested
-            }
+            };
         }
     };
 
@@ -391,19 +435,17 @@ if (process.env.NODE_ENV !== 'production') {
             const offset = getColumnOffset(props, columnIndex, _instanceProps);
             const isRtl = direction === "rtl";
             itemStyleCache[key] = style = {
-          position: 'absolute',
-          left: isRtl ? undefined : offset,
-          right: isRtl ? offset : undefined,
-          top: getRowOffset(props, rowIndex, _instanceProps),
-          height: getRowHeight(props, rowIndex, _instanceProps),
-          width: getColumnWidth(props, columnIndex, _instanceProps),
-        };
+                position: "absolute",
+                left: isRtl ? undefined : offset,
+                right: isRtl ? offset : undefined,
+                top: getRowOffset(props, rowIndex, _instanceProps),
+                height: getRowHeight(props, rowIndex, _instanceProps),
+                width: getColumnWidth(props, columnIndex, _instanceProps),
+            };
         }
 
         return style;
     };
-
-    
 
     const _getHorizontalRangeToRender = () => {
         const overscanCountResolved =
@@ -412,7 +454,7 @@ if (process.env.NODE_ENV !== 'production') {
         if (columnCount === 0 || rowCount === 0) {
             return [0, 0, 0, 0];
         }
-        
+
         const startIndex = getColumnStartIndexForOffset(
             props,
             scrollLeft,
@@ -424,7 +466,7 @@ if (process.env.NODE_ENV !== 'production') {
             scrollLeft,
             _instanceProps
         );
-        
+
         // Overscan by one item in each direction so that tab/focus works.
         // If there isn't at least one extra item, tab loops back around.
         const overscanBackward =
@@ -487,40 +529,37 @@ if (process.env.NODE_ENV !== 'production') {
         const {
             clientHeight,
             clientWidth,
-            scrollLeft:scrollLeft_,
-            scrollTop:scrollTop_,
+            scrollLeft: scrollLeft_,
+            scrollTop: scrollTop_,
             scrollHeight,
             scrollWidth,
         } = event.currentTarget;
         request_resetIsScrollingDebounced = true;
-        
+
         if (scrollLeft === scrollLeft_ && scrollTop === scrollTop_) {
             // Scroll position may have been updated by cDM/cDU,
             // In which case we don't need to trigger another render,
             // And we don't want to update state.isScrolling.
             return null;
         }
-        
+
         // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
         // This is not the case for all browsers though (e.g. Chrome reports values as positive, measured relative to the left).
         // It's also easier for this component if we convert offsets to the same format as they would be in for ltr.
         // So the simplest solution is to determine which browser behavior we're dealing with, and convert based on it.
         let calculatedScrollLeft = scrollLeft_;
         if (direction === "rtl") {
-            
             switch (getRTLOffsetType()) {
                 case "negative":
-                    
                     calculatedScrollLeft = -scrollLeft_;
                     break;
                 case "positive-descending":
-                
                     calculatedScrollLeft =
                         scrollWidth - clientWidth - scrollLeft_;
                     break;
             }
         }
-        
+
         // Prevent Safari's elastic scrolling from causing visual shaking when scrolling past bounds.
         calculatedScrollLeft = Math.max(
             0,
@@ -530,7 +569,7 @@ if (process.env.NODE_ENV !== 'production') {
             0,
             Math.min(scrollTop_, scrollHeight - clientHeight)
         );
-        
+
         isScrolling = true;
         horizontalScrollDirection =
             scrollLeft < scrollLeft_ ? "forward" : "backward";
@@ -556,6 +595,8 @@ if (process.env.NODE_ENV !== 'production') {
         _resetIsScrollingTimeoutId = null;
 
         isScrolling = false;
+        verticalScrollDirection = "";
+        horizontalScrollDirection = "";
         request_getItemStyleCache = true;
     };
 

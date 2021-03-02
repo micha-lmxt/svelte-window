@@ -3,7 +3,27 @@
     // Copyright (c) 2018 Brian Vaughn
     const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
-    const defaultItemKey = (index, data) => index;
+    const defaultItemKey = (index, data) =>
+        index; /*
+            if (isHorizontal && typeof width !== "number") {
+                throw Error(
+                    'An invalid "width" prop has been specified. ' +
+                        "Horizontal lists must specify a number for width. " +
+                        `"${
+                            width === null ? "null" : typeof width
+                        }" was specified.`
+                );
+            } else if (!isHorizontal && typeof height !== "number") {
+                throw Error(
+                    'An invalid "height" prop has been specified. ' +
+                        "Vertical lists must specify a number for height. " +
+                        `"${
+                            height === null ? "null" : typeof height
+                        }" was specified.`
+                );
+            }
+        }
+    };*/
 
     // In DEV mode, this Set helps us only log a warning once per component instance.
     // This avoids spamming the console every time a render happens.
@@ -99,26 +119,7 @@
                         }" was specified.`
                 );
             }
-*//*
-            if (isHorizontal && typeof width !== "number") {
-                throw Error(
-                    'An invalid "width" prop has been specified. ' +
-                        "Horizontal lists must specify a number for width. " +
-                        `"${
-                            width === null ? "null" : typeof width
-                        }" was specified.`
-                );
-            } else if (!isHorizontal && typeof height !== "number") {
-                throw Error(
-                    'An invalid "height" prop has been specified. ' +
-                        "Vertical lists must specify a number for height. " +
-                        `"${
-                            height === null ? "null" : typeof height
-                        }" was specified.`
-                );
-            }
-        }
-    };*/
+*/
 </script>
 
 <script>
@@ -147,9 +148,9 @@
         style = undefined,
         useIsScrolling = false,
         width = undefined;
-        // specific function props
+    // specific function props
     export let specificFunctionProps;
-    const {   
+    const {
         getItemOffset,
         getEstimatedTotalSize,
         getItemSize,
@@ -158,7 +159,7 @@
         getStopIndexForStartIndex,
         initInstanceProps,
         shouldResetStyleCacheOnItemSizeChange,
-        validateProps
+        validateProps,
     } = specificFunctionProps;
     // state
     let isScrolling = false,
@@ -167,22 +168,23 @@
             typeof initialScrollOffset === "number" ? initialScrollOffset : 0,
         scrollUpdateWasRequested = false;
 
-    let _styleCache = {},_styleCacheCheck={};
-    
-    export const _getItemStyleCache = (a,b,c)=>{
+    let _styleCache = {},
+        _styleCacheCheck = {};
+
+    export const _getItemStyleCache = (a, b, c) => {
         if (
             a === _styleCacheCheck.a &&
             b === _styleCacheCheck.b &&
-            c === _styleCacheCheck.c 
-        ){
+            c === _styleCacheCheck.c
+        ) {
             return _styleCache;
         }
-        _styleCacheCheck = {a,b,c}
+        _styleCacheCheck = { a, b, c };
         _styleCache = {};
         return _styleCache;
-    }     
-    export const instance = {_getItemStyleCache:_getItemStyleCache};
-    
+    };
+    export const instance = { _getItemStyleCache: _getItemStyleCache };
+
     let state;
     $: state = {
         instance,
@@ -197,7 +199,7 @@
         direction,
         height,
         initialScrollOffset,
-        innerRef,
+        //innerRef,
         innerElementType,
         innerTagName,
         itemCount,
@@ -207,7 +209,7 @@
         layout,
         onItemsRendered,
         onScroll,
-        outerRef,
+        //outerRef,
         outerElementType,
         outerTagName,
         overscanCount,
@@ -216,10 +218,11 @@
         width,
     };
     // class member
-    let _instanceProps = initInstanceProps(Object.assign({estimatedItemSize:undefined},props),instance),
+    let _instanceProps = initInstanceProps(
+            Object.assign({ estimatedItemSize: undefined }, props),
+            instance
+        ),
         _resetIsScrollingTimeoutId = null;
-    
-        
 
     // need extra rollup plugin to have access to process.env, so remove it for now
     //$: validateSharedProps(props, state);
@@ -286,31 +289,33 @@
     // render()
     // render state vars
     let isHorizontal,
-        onScroll_,
-        items,
+        items = [],
         estimatedTotalSize;
     $: isHorizontal = direction === "horizontal" || layout === "horizontal";
 
     $: onScroll_ = isHorizontal ? _onScrollHorizontal : _onScrollVertical;
 
-    $: {
-        const [startIndex, stopIndex] = _getRangeToRender(
-            props,
-            state,
-            _instanceProps
-        );
-        
+    $: [startIndex, stopIndex] = _getRangeToRender(
+        props,
+        state,
+        _instanceProps
+    );
+    
+    const render = () => {
         items = [];
+        items.length = stopIndex - startIndex + 1;
         const itemKey_ = itemKey || defaultItemKey;
+        
         if (itemCount > 0) {
+            let i=0;
             for (let index = startIndex; index <= stopIndex; index++) {
-                items.push({
+                items[i++] = {
                     data: itemData,
                     key: itemKey_(index, itemData),
                     index,
                     isScrolling: useIsScrolling ? isScrolling : undefined,
                     style: _getItemStyle(index),
-                });
+                };
             }
         }
 
@@ -318,6 +323,8 @@
         // So their actual sizes (if variable) are taken into consideration.
         estimatedTotalSize = getEstimatedTotalSize(props, _instanceProps);
     }
+    $: render(startIndex,stopIndex,props,_instanceProps
+    );
 
     const _getRangeToRender = (props_, state_, _instanceProps_) => {
         const { isScrolling, scrollDirection, scrollOffset } = state_;
@@ -357,7 +364,8 @@
         ];
     };
 
-    let _onItemsRenderedCache = {}, _onScrollCache = {};
+    let _onItemsRenderedCache = {},
+        _onScrollCache = {};
     const _callPropsCallbacks = () => {
         if (onItemsRendered === "function") {
             if (itemCount > 0) {
@@ -368,12 +376,12 @@
                     visibleStartIndex,
                     visibleStopIndex,
                 ] = _getRangeToRender();
-                if (    
+                if (
                     ch.overscanStartIndex !== overscanStartIndex ||
                     ch.overscanStopIndex !== overscanStopIndex ||
                     ch.visibleStartIndex !== visibleStartIndex ||
                     ch.visibleStopIndex !== visibleStopIndex
-                ){
+                ) {
                     onItemsRendered(
                         overscanStartIndex,
                         overscanStopIndex,
@@ -384,28 +392,24 @@
                         overscanStartIndex,
                         overscanStopIndex,
                         visibleStartIndex,
-                        visibleStopIndex
-                    }
+                        visibleStopIndex,
+                    };
                 }
             }
         }
-        const ch = _onScrollCache
-        if (typeof onScroll === "function" && (
-                scrollDirection !== ch.scrollDirection ||
+        const ch = _onScrollCache;
+        if (
+            typeof onScroll === "function" &&
+            (scrollDirection !== ch.scrollDirection ||
                 scrollOffset !== ch.scrollOffset ||
-                scrollUpdateWasRequested !== ch.scrollUpdateWasRequested
-        )) {
-
-            onScroll(
-                scrollDirection,
-                scrollOffset,
-                scrollUpdateWasRequested
-            );
+                scrollUpdateWasRequested !== ch.scrollUpdateWasRequested)
+        ) {
+            onScroll(scrollDirection, scrollOffset, scrollUpdateWasRequested);
             _onScrollCache = {
                 scrollOffset,
                 scrollDirection,
-                scrollUpdateWasRequested
-            }
+                scrollUpdateWasRequested,
+            };
         }
     };
 
@@ -434,19 +438,17 @@
             const isRtl = direction === "rtl";
             const offsetHorizontal = isHorizontal ? offset : 0;
             itemStyleCache[index] = style_ = {
-                    position: 'absolute',
-                    left: isRtl ? undefined : offsetHorizontal,
-                    right: isRtl ? offsetHorizontal : undefined,
-                    top: !isHorizontal ? offset : 0,
-                    height: !isHorizontal ? size : '100%',
-                    width: isHorizontal ? size : '100%',
-                };
+                position: "absolute",
+                left: isRtl ? undefined : offsetHorizontal,
+                right: isRtl ? offsetHorizontal : undefined,
+                top: !isHorizontal ? offset : 0,
+                height: !isHorizontal ? size : "100%",
+                width: isHorizontal ? size : "100%",
+            };
         }
 
         return style_;
     };
-
-    
 
     const _onScrollHorizontal = (event) => {
         const { clientWidth, scrollLeft, scrollWidth } = event.currentTarget;
@@ -574,11 +576,11 @@
 
 <div
     class={'outerElement' + (className ? ' ' + className : '')}
-    style="height:{typeof(height)==="number"?height+"px":height};width:{typeof(width)==="number"?width+"px":width};direction:{direction};{style||""}"
+    style="height:{typeof height === 'number' ? height + 'px' : height};width:{typeof width === 'number' ? width + 'px' : width};direction:{direction};{style || ''}"
     bind:this={outerRef}
     on:scroll={onScroll_}>
     <div
         style={'height: ' + (isHorizontal ? '100%;' : estimatedTotalSize + 'px;') + (isScrolling ? "pointer-events: 'none';" : '') + 'width: ' + (isHorizontal ? estimatedTotalSize + 'px;' : '100%;')}>
-        <slot items={items} />
+        <slot {items} />
     </div>
 </div>
