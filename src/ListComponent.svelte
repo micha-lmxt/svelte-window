@@ -367,7 +367,7 @@
     let _onItemsRenderedCache = {},
         _onScrollCache = {};
     const _callPropsCallbacks = () => {
-        if (onItemsRendered === "function") {
+        if (typeof onItemsRendered === "function") {
             if (itemCount > 0) {
                 const ch = _onItemsRenderedCache;
                 const [
