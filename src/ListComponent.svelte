@@ -375,7 +375,7 @@
                     overscanStopIndex,
                     visibleStartIndex,
                     visibleStopIndex,
-                ] = _getRangeToRender();
+                ] = _getRangeToRender(props, state, _instanceProps);
                 if (
                     ch.overscanStartIndex !== overscanStartIndex ||
                     ch.overscanStopIndex !== overscanStopIndex ||
