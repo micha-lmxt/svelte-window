@@ -382,12 +382,12 @@
                     ch.visibleStartIndex !== visibleStartIndex ||
                     ch.visibleStopIndex !== visibleStopIndex
                 ) {
-                    onItemsRendered(
+                    onItemsRendered({
                         overscanStartIndex,
                         overscanStopIndex,
                         visibleStartIndex,
                         visibleStopIndex
-                    );
+                    });
                     _onItemsRenderedCache = {
                         overscanStartIndex,
                         overscanStopIndex,
@@ -404,7 +404,7 @@
                 scrollOffset !== ch.scrollOffset ||
                 scrollUpdateWasRequested !== ch.scrollUpdateWasRequested)
         ) {
-            onScroll(scrollDirection, scrollOffset, scrollUpdateWasRequested);
+            onScroll({scrollDirection, scrollOffset, scrollUpdateWasRequested});
             _onScrollCache = {
                 scrollOffset,
                 scrollDirection,

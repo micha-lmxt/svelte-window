@@ -364,7 +364,7 @@ if (process.env.NODE_ENV !== 'production') {
                     visibleRowStartIndex !== ch.visibleRowStartIndex ||
                     visibleRowStopIndex !== ch.visibleRowStopIndex
                 ) {
-                    onItemsRendered(
+                    onItemsRendered({
                         overscanColumnStartIndex,
                         overscanColumnStopIndex,
                         overscanRowStartIndex,
@@ -373,7 +373,7 @@ if (process.env.NODE_ENV !== 'production') {
                         visibleColumnStopIndex,
                         visibleRowStartIndex,
                         visibleRowStopIndex
-                    );
+                    });
                     _onItemsRenderedCache = {
                         overscanColumnStartIndex,
                         overscanColumnStopIndex,
@@ -398,13 +398,13 @@ if (process.env.NODE_ENV !== 'production') {
                 scrollUpdateWasRequested === scrollUpdateWasRequested
             )
         ) {
-            onScroll(
+            onScroll({
                 scrollLeft,
                 scrollTop,
                 horizontalScrollDirection,
                 verticalScrollDirection,
                 scrollUpdateWasRequested
-            );
+            });
             _onScrollCache = {
                 scrollLeft,
                 scrollTop,
