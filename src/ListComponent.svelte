@@ -580,6 +580,7 @@
     bind:this={outerRef}
     on:scroll={onScroll_}>
     <div
+        bind:this={innerRef}
         style={'height: ' + (isHorizontal ? '100%;' : estimatedTotalSize + 'px;') + (isScrolling ? "pointer-events: 'none';" : '') + 'width: ' + (isHorizontal ? estimatedTotalSize + 'px;' : '100%;')}>
         <slot {items} />
     </div>
