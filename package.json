@@ -12,6 +12,10 @@
       "url": "https://github.com/micha-lmxt/svelte-window"
     }
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/micha-lmxt/svelte-window.git"
+  },
   "author": "micha-lmxt <micha-lmxt@gradientdescent.de> (https://gradientdescent.de)",
   "license": "MIT",
   "devDependencies": {
