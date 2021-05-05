@@ -68,7 +68,7 @@ Here is another example with a fixed size grid with a scroll-to button, scrollin
   let:items>
   {#each items as it (it.key)}
     <div style={sty(it.style)}>
-      {isScrolling ? 'Scrolling' : `Row ${rowIndex} - Col ${columnIndex}`}
+      {it.isScrolling ? 'Scrolling' : `Row ${it.rowIndex} - Col ${it.columnIndex}`}
     </div>
   {/each}
 </Grid>
