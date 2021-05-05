@@ -41,46 +41,39 @@ Here is another example with a fixed size grid with a scroll-to button, scrollin
 
 ```javascript
 <script>
-    import { FixedSizeGrid as Grid , styleString as sty} from 'svelte-window';
- 
-    let grid;
-  
-    const click = () => {
-        if (grid){
-            grid.scrollToItem({
-                align: "start",
-                columnIndex: 150,
-                rowIndex: 300
-            });    
-        }
-    }
+  import { FixedSizeGrid as Grid, styleString as sty } from 'svelte-window'
 
-</script> 
+  let grid
+
+  const click = () => {
+    if (grid) {
+      grid.scrollToItem({
+        align: 'start',
+        columnIndex: 150,
+        rowIndex: 300,
+      })
+    }
+  }
+</script>
 
 <Grid
-bind:this={grid}
-columnCount={1000}
-columnWidth={100}
-height={150}
-rowCount={1000}
-rowHeight={35}
-width={300}
-useIsScrolling
-let:items
->
-   {#each items as it (it.key)}
-        <div style={sty(it.style)}>
-            {
-                isScrolling ? 
-                'Scrolling' : 
-                `Row ${rowIndex} - Col ${columnIndex}`
-            }
-        <div>
-    {/each}
+  bind:this={grid}
+  columnCount={1000}
+  columnWidth={100}
+  height={150}
+  rowCount={1000}
+  rowHeight={35}
+  width={300}
+  useIsScrolling
+  let:items>
+  {#each items as it (it.key)}
+    <div style={sty(it.style)}>
+      {isScrolling ? 'Scrolling' : `Row ${rowIndex} - Col ${columnIndex}`}
+    </div>
+  {/each}
 </Grid>
-<button on:click={click}>
-    To row 300, column 150
-</button>
+
+<button on:click={click}> To row 300, column 150 </button>
 ```
 
 ## Differences to the React library
