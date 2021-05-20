@@ -76,6 +76,26 @@ Here is another example with a fixed size grid with a scroll-to button, scrollin
 <button on:click={click}> To row 300, column 150 </button>
 ```
 
+### SvelteKit
+
+SvelteKit is in public beta, so a 100% compatibility cannot be guaranteed. Since version 1.2.0 `svelte-window` should work with SvelteKit when imported as a devDependency (`npm i --save-dev svelte-window`). By design, `svelte-window` is a client side library. Normal components like `FixedSizeList` need to be guarded from server-side-rendering (eg. with a `{#if mounted}...` clause). For convenience, there are SSR counterparts to all four components, which handle guarding within the library: `FixedSizeListSSR`, `FixedSizeGridSSR`, `VariableSizeListSSR`, `VariableSizeGridSSR`. In the examples above, just change eg.:
+
+```javascript
+<script>
+    import { FixedSizeList as List, styleString as sty } from 'svelte-window';
+</script>
+...
+```
+
+to 
+
+```javascript
+<script>
+    import { FixedSizeListSSR as List, styleString as sty } from 'svelte-window';
+</script>
+...
+```
+
 ## Differences to the React library
 
 1. Grids and lists don't actively render the children. Instead, an array of item information is passed down via item props. You can use the [let:item](https://svelte.dev/tutorial/slot-props) to access it and render with the [each block](https://svelte.dev/tutorial/each-blocks).
