@@ -96,6 +96,21 @@ to
 ...
 ```
 
+## Bundle Size
+
+If you don't use all of `svelte-window`s components on a page, you can minimize the bundle size by using direct imports from the `lib` folder. Eg. you can change imports like this
+
+```javascript
+import { FixedSizeListSSR as List, styleString as sty } from 'svelte-window';
+```
+
+to
+
+```javascript
+import List from 'svelte-window/lib/FixedSizeListSSR.svelte';
+import {styleString as sty} from 'svelte-window/src/styleString';
+```
+
 ## Differences to the React library
 
 1. Grids and lists don't actively render the children. Instead, an array of item information is passed down via item props. You can use the [let:item](https://svelte.dev/tutorial/slot-props) to access it and render with the [each block](https://svelte.dev/tutorial/each-blocks).
