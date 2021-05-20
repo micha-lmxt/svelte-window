@@ -8,18 +8,7 @@
     //
     // In DEV mode, this Set helps us only log a warning once per component instance.
     // This avoids spamming the console every time a render happens.
-    /*
-let devWarningsOverscanCount = null;
-let devWarningsOverscanRowsColumnsCount = null;
-let devWarningsTagName = null;
-if (process.env.NODE_ENV !== 'production') {
-  if (typeof window !== 'undefined' && typeof window.WeakSet !== 'undefined') {
-    devWarningsOverscanCount = new WeakSet();
-    devWarningsOverscanRowsColumnsCount = new WeakSet();
-    devWarningsTagName = new WeakSet();
-  }
-}
-*/
+   
 </script>
 
 <script>
@@ -72,7 +61,7 @@ if (process.env.NODE_ENV !== 'production') {
         getRowStopIndexForStartIndex,
         initInstanceProps,
         shouldResetStyleCacheOnItemSizeChange,
-        validateProps,
+        /*validateProps,*/
     } = specificFunctionProps;
 
     let _styleCache = {},

@@ -1,11 +1,6 @@
 // Ported from "react-window@1.8.6"
 // Copyright (c) 2018 Brian Vaughn
 
-
-
-import createListComponent from './createListComponent';
-
-
 const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
 const getItemMetadata = (
@@ -148,7 +143,7 @@ const getEstimatedTotalSize = (
   return totalSizeOfMeasuredItems + totalSizeOfUnmeasuredItems;
 };
 
-const VariableSizeList = createListComponent({
+const VariableSizeListSpecificProps = ({
   getItemOffset: (
     props,
     index,
@@ -300,4 +295,4 @@ const VariableSizeList = createListComponent({
   },
 });
 
-export default VariableSizeList;
+export default VariableSizeListSpecificProps;

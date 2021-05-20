@@ -4,122 +4,17 @@
     const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
     const defaultItemKey = (index, data) =>
-        index; /*
-            if (isHorizontal && typeof width !== "number") {
-                throw Error(
-                    'An invalid "width" prop has been specified. ' +
-                        "Horizontal lists must specify a number for width. " +
-                        `"${
-                            width === null ? "null" : typeof width
-                        }" was specified.`
-                );
-            } else if (!isHorizontal && typeof height !== "number") {
-                throw Error(
-                    'An invalid "height" prop has been specified. ' +
-                        "Vertical lists must specify a number for height. " +
-                        `"${
-                            height === null ? "null" : typeof height
-                        }" was specified.`
-                );
-            }
-        }
-    };*/
+        index;
 
     // In DEV mode, this Set helps us only log a warning once per component instance.
     // This avoids spamming the console every time a render happens.
-    /*
-    let devWarningsDirection = null;
-    let devWarningsTagName = null;
-    if (process.env.NODE_ENV !== "production") {
-        if (
-            typeof window !== "undefined" &&
-            typeof window.WeakSet !== "undefined"
-        ) {
-            devWarningsDirection = new WeakSet();
-            devWarningsTagName = new WeakSet();
-        }
-    }*/
+ 
     // NOTE: I considered further wrapping individual items with a pure ListItem component.
     // This would avoid ever calling the render function for the same index more than once,
     // But it would also add the overhead of a lot of components/fibers.
     // I assume people already do this (render function returning a class component),
     // So my doing it would just unnecessarily double the wrappers.
-    /*
-    const validateSharedProps = (
-        {
-            direction,
-            height,
-            layout,
-            innerTagName,
-            outerTagName,
-            width,
-        },
-        { instance }
-    ) => {
-        if (process.env.NODE_ENV !== "production") {
-            if (innerTagName != null || outerTagName != null) {
-                if (devWarningsTagName && !devWarningsTagName.has(instance)) {
-                    devWarningsTagName.add(instance);
-                    console.warn(
-                        "The innerTagName and outerTagName props have been deprecated. " +
-                            "Please use the innerElementType and outerElementType props instead."
-                    );
-                }
-            }
-
-            // TODO Deprecate direction "horizontal"
-            const isHorizontal =
-                direction === "horizontal" || layout === "horizontal";
-
-            switch (direction) {
-                case "horizontal":
-                case "vertical":
-                    if (
-                        devWarningsDirection &&
-                        !devWarningsDirection.has(instance)
-                    ) {
-                        devWarningsDirection.add(instance);
-                        console.warn(
-                            'The direction prop should be either "ltr" (default) or "rtl". ' +
-                                'Please use the layout prop to specify "vertical" (default) or "horizontal" orientation.'
-                        );
-                    }
-                    break;
-                case "ltr":
-                case "rtl":
-                    // Valid values
-                    break;
-                default:
-                    throw Error(
-                        'An invalid "direction" prop has been specified. ' +
-                            'Value should be either "ltr" or "rtl". ' +
-                            `"${direction}" was specified.`
-                    );
-            }
-
-            switch (layout) {
-                case "horizontal":
-                case "vertical":
-                    // Valid values
-                    break;
-                default:
-                    throw Error(
-                        'An invalid "layout" prop has been specified. ' +
-                            'Value should be either "horizontal" or "vertical". ' +
-                            `"${layout}" was specified.`
-                    );
-            }
-/*
-            if (children == null) {
-                throw Error(
-                    'An invalid "children" prop has been specified. ' +
-                        "Value should be a React component. " +
-                        `"${
-                            children === null ? "null" : typeof children
-                        }" was specified.`
-                );
-            }
-*/
+   
 </script>
 
 <script>

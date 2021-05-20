@@ -1,9 +1,7 @@
 // Ported from "react-window@1.8.6"
 // Copyright (c) 2018 Brian Vaughn
-import createGridComponent from './createGridComponent';
 
-
-const FixedSizeGrid = createGridComponent({
+const FixedSizeGridSpecificProps = {
   getColumnOffset: ({ columnWidth },index) =>
     index * columnWidth,
 
@@ -239,6 +237,6 @@ const FixedSizeGrid = createGridComponent({
       }
     }
   },
-});
+};
 
-export default FixedSizeGrid;
+export default FixedSizeGridSpecificProps;

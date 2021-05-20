@@ -1,11 +1,6 @@
 // Ported from "react-window@1.8.6"
 // Copyright (c) 2018 Brian Vaughn
 
-
-import createGridComponent from './createGridComponent';
-
-
-
 const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
 const getEstimatedTotalHeight = (
@@ -265,7 +260,7 @@ const getOffsetForIndexAndAlignment = (
   }
 };
 
-const VariableSizeGrid = createGridComponent({
+const VariableSizeGridSpecificProps = ({
   getColumnOffset: (
     props,
     index,
@@ -482,4 +477,4 @@ const VariableSizeGrid = createGridComponent({
   },
 });
 
-export default VariableSizeGrid;
+export default VariableSizeGridSpecificProps;

@@ -386,6 +386,18 @@ export class FixedSizeList extends SvelteComponentTyped<FixedSizeListProps, {}, 
 }
 
 /**
+ * Fixed Size List for use in Server-Side-Rendered environment
+ * 
+ * usage: 
+ * <FixedSizeListSSR {...props}>
+ *  {#each items as item (item.key)}
+ *      <Child style={item.style}>{item.index}</Child>
+ *  {/each}
+ * </FixedSizeListSSR>  
+ */
+export type FixedSizeListSSR = FixedSizeList;
+
+/**
  * Variable Size List
  * 
  * usage: 
@@ -431,6 +443,17 @@ export class VariableSizeList extends SvelteComponentTyped<VariableSizeListProps
         resetAfterIndex: (index: number, shouldForceUpdate?: boolean) => void;
     }
 }
+/**
+ * Variable Size List for use in Server-Side-Rendered environment
+ * 
+ * usage: 
+ * <VariableSizeListSSR {...props}>
+ *  {#each items as item (item.key)}
+ *      <Child style={item.style}>{item.index}</Child>
+ *  {/each}
+ * </VariableSizeListSSR> * 
+ */
+export type VariableSizeListSSR = VariableSizeList
 
 /**
  * Fixed Size Grid
@@ -472,6 +495,20 @@ export class FixedSizeGrid extends SvelteComponentTyped<FixedSizeGridProps, {}, 
         rowIndex?: number;
     }): void;
 }
+
+/**
+ * Fixed Size Grid for use in Server-Side-Rendered environment
+ * 
+ * usage: 
+ * <FixedSizeGridSSR {...props}>
+ *  {#each items as item (item.key)}
+ *      <Child style={item.style}>{item.rowIndex} - {item.columnIndex}</Child>
+ *  {/each}
+ * </FixedSizeGridSSR> * 
+ */
+export type FixedSizeGridSSR = FixedSizeGrid
+
+
 /**
  * Variable Size Grid
  * 
@@ -549,6 +586,18 @@ export class VariableSizeGrid extends SvelteComponentTyped<VariableSizeGridProps
         resetAfterRowIndex: (index: number, shouldForceUpdate?: boolean) => void;
     }
 }
+
+/**
+ * Variable Size Grid for use in Server-Side-Rendered environment
+ * 
+ * usage: 
+ * <VariableSizeGridSSR {...props}>
+ *  {#each items as item (item.key)}
+ *      <Child style={item.style}>{item.rowIndex} - {item.columnIndex}</Child>
+ *  {/each}
+ * </VariableSizeGridSSR> * 
+ */
+export type VariableSizeGridSSR = VariableSizeGrid
 
 /**
  * Custom comparison function for React.memo().

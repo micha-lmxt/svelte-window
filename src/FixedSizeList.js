@@ -1,11 +1,7 @@
 // Ported from "react-window@1.8.6"
 // Copyright (c) 2018 Brian Vaughn
 
-
-import createListComponent from './createListComponent';
-
-
-const FixedSizeList = createListComponent({
+const FixedSizeListSpecificProps = ({
   getItemOffset: ({ itemSize }, index) =>
     index * ((itemSize)),
 
@@ -128,4 +124,4 @@ const FixedSizeList = createListComponent({
   },
 });
 
-export default FixedSizeList;
+export default FixedSizeListSpecificProps;
