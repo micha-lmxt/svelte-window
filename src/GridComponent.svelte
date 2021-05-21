@@ -319,7 +319,8 @@
             rowCount,
             rowHeight,
             useIsScrolling,
-            width
+            width,
+            isScrollingRender
         );
 
     }

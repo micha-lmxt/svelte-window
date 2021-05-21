@@ -9,7 +9,9 @@
     onMount(_=>m=true);
     let inst = {};
     export const instance = inst
-    $: Object.assign(inst,g.instance);
+    $: if (g) {
+        Object.assign(inst,g.instance);
+    }
 </script>
 {#if m}
 <ListComponent bind:this={g} specificFunctionProps={specificProps} {...$$restProps} let:items><slot {items}/></ListComponent>
