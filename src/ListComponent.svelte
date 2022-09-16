@@ -198,10 +198,11 @@
     
     const render = () => {
         items = [];
-        items.length = stopIndex - startIndex + 1;
-        const itemKey_ = itemKey || defaultItemKey;
-        
+
         if (itemCount > 0) {
+            items.length = stopIndex - startIndex + 1;
+            const itemKey_ = itemKey || defaultItemKey;
+        
             let i=0;
             for (let index = startIndex; index <= stopIndex; index++) {
                 items[i++] = {
