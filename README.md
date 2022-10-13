@@ -21,7 +21,7 @@ This library is a port of react-window, here are some examples: [react-window.no
 This is how to render a basic list:
 
 
-```javascript
+```svelte
 <script>
     import { FixedSizeList as List, styleString as sty } from 'svelte-window';
 </script>
@@ -39,7 +39,7 @@ let:items>
 
 Here is another example with a fixed size grid with a scroll-to button, scrolling indicators:
 
-```javascript
+```svelte
 <script>
   import { FixedSizeGrid as Grid, styleString as sty } from 'svelte-window'
 
@@ -76,8 +76,77 @@ Here is another example with a fixed size grid with a scroll-to button, scrollin
 <button on:click={click}> To row 300, column 150 </button>
 ```
 
+#### Calendar example with VariableSizeGrid
+
+Here is a more complex example. Each column represents a date, workday coluns are wider than weekend columns. A sparse dataset is called.
+
+```svelte
+<script lang="ts">
+  import { VariableSizeGrid as Grid, styleString as sty } from 'svelte-window';
+  const startDate = new Date("1/1/2022");
+  const dateCell = (rowIndex:number,columnIndex:number)=>{
+    return new Date(startDate.getTime() + 
+      1000 * 60 * 60 * 8  + // start at 8 o'clock
+      1000 * 60 * 60 * rowIndex + // each row adds an hour
+      1000 * 60 * 60 * 24 * columnIndex // each column adds a day
+    )
+  }
+ 
+  const isWorkday = (index)=>{
+    const offset = startDate.getDay();
+    const d = (index + offset) % 7;
+    //return true on monday to friday
+    return d!==0 && d !== 6; 
+  }
+
+  const columnWidth = (index)=>isWorkday(index) ? 200 : 100
+
+  //round date to full hours
+  const formatDate = (date:Date)=>Math.round(date.getTime() / (1000 * 60 * 60 )) 
+
+  //sparse event data
+  const rawEvents = [
+    {date:new Date("1/4/2022 10:00"), event:"Pilates"},
+    {date:new Date("1/11/2022 11:00"), event:"Zumba"},
+    {date:new Date("1/18/2022 11:00"), event:"Pilates"},
+    {date:new Date("1/25/2022 10:00"), event:"Zumba"},
+    //etc.
+  ]
+  
+  //format for quick access
+  const events = rawEvents.reduce(
+    (p,v)=>{
+      p[formatDate(v.date)] = v
+      return p
+    },{}
+  )
+  
+</script>
+
+<Grid
+  columnCount={1000}
+  {columnWidth}
+  height={150}
+  rowCount={12}
+  rowHeight={()=>95}
+  width={300}
+  let:items>
+  {#each items as it (it.key)}
+    <div style={sty(it.style)}>
+      {dateCell(it.rowIndex, it.columnIndex)}
+      {#if events[formatDate(dateCell(it.rowIndex,it.columnIndex))]}
+        {events[formatDate(dateCell(it.rowIndex,it.columnIndex))].event}
+      {/if}
+    </div>
+  {/each}
+</Grid>
+```
+
+
 ### SvelteKit
 
+This section is probably obsolete. SvelteKit is pretty stable today, so no problems should occur. 
+----
 SvelteKit is in public beta, so a 100% compatibility cannot be guaranteed. Since version 1.2.0 `svelte-window` should work with SvelteKit when imported as a devDependency (`npm i --save-dev svelte-window`). By design, `svelte-window` is a client side library. Normal components like `FixedSizeList` need to be guarded from server-side-rendering (eg. with a `{#if mounted}...` clause). For convenience, there are SSR counterparts to all four components, which handle guarding within the library: `FixedSizeListSSR`, `FixedSizeGridSSR`, `VariableSizeListSSR`, `VariableSizeGridSSR`. In the examples above, just change eg.:
 
 ```javascript
@@ -95,6 +164,7 @@ to
 </script>
 ...
 ```
+---
 
 ## Bundle Size
 
